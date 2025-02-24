@@ -558,7 +558,6 @@ class TestTickerMiscFinancials(unittest.TestCase):
 
     def test_ttm_income_statement(self):
         expected_keys = ["Total Revenue", "Pretax Income", "Normalized EBITDA"]
-        expected_periods_days = 365
 
         # Test contents of table
         data = self.ticker.get_income_stmt(pretty=True, freq='trailing')
@@ -566,8 +565,8 @@ class TestTickerMiscFinancials(unittest.TestCase):
         self.assertFalse(data.empty, "data is empty")
         for k in expected_keys:
             self.assertIn(k, data.index, "Did not find expected row in index")
-        period = abs((data.columns[0]-data.columns[1]).days)
-        self.assertLess(abs(period-expected_periods_days), 366, "Difference between TTM calculations should be less than a year.")
+        # Trailing 12 months there must be exactly one column
+        self.assertEqual(len(data.columns), 1, "Only one column should be returned on TTM income statement")
 
         # Test property defaults
         data2 = self.ticker.ttm_income_stmt
@@ -703,7 +702,6 @@ class TestTickerMiscFinancials(unittest.TestCase):
 
     def test_ttm_cash_flow(self):
         expected_keys = ["Operating Cash Flow", "Net PPE Purchase And Sale"]
-        expected_periods_days = 365
 
         # Test contents of table
         data = self.ticker.get_cashflow(pretty=True, freq='trailing')
@@ -711,7 +709,8 @@ class TestTickerMiscFinancials(unittest.TestCase):
         self.assertFalse(data.empty, "data is empty")
         for k in expected_keys:
             self.assertIn(k, data.index, "Did not find expected row in index")
-        self.assertEqual(len(data.columns), 1, "Only one column should be returned on cash flow TTM")
+        # Trailing 12 months there must be exactly one column
+        self.assertEqual(len(data.columns), 1, "Only one column should be returned on TTM cash flow")
 
         # Test property defaults
         data2 = self.ticker.ttm_cashflow

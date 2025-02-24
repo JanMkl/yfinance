@@ -148,4 +148,8 @@ class Financials:
         df = df.reindex([k for k in keys if k in df.index])
         df = df[sorted(df.columns, reverse=True)]
 
+        # Trailing 12 months return only the first column.
+        if (timescale == "trailing"):
+            df = df.iloc[:, [0]]
+
         return df
