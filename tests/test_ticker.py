@@ -575,7 +575,7 @@ class TestTickerMiscFinancials(unittest.TestCase):
 
         # Test pretty=False
         expected_keys = [k.replace(' ', '') for k in expected_keys]
-        data = self.ticker.get_income_stmt(pretty=False)
+        data = self.ticker.get_income_stmt(pretty=False, freq='trailing')
         self.assertIsInstance(data, pd.DataFrame, "data has wrong type")
         self.assertFalse(data.empty, "data is empty")
         for k in expected_keys:
